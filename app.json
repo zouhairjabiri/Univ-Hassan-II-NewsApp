@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "univ hassan2",
+    "slug": "univh2casa",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/image/Logo_UHIIC_Icon.png",
+    "splash": {
+      "image": "./src/image/Logo_UHIIC.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.news.univcasa",
+      "versionCode": 2
+    }
+    
+  }
+}

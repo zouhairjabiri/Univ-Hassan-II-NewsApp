@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ImageBackground, ScrollView, AsyncStorage,TouchableOpacity } from 'react-native';
 import { AirbnbRating } from 'react-native-elements';
-import { FontAwesome,MaterialIcons, AntDesign,Entypo } from '@expo/vector-icons';
+import { FontAwesome,MaterialIcons, AntDesign,Entypo,Ionicons } from '@expo/vector-icons';
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert'
+
 import moment from "moment";
+
 export function feed_detail(props) {
   const { actualite } = props.route.params;
+  const { rateuser } = props.route.params;
   const [username, setusername] = useState('');
   const [id, setid] = useState('');
   const [message, setmessage] = useState('');
-
+  const [show, setshow] = useState(false);
+ 
   props.navigation.setOptions({
     headerTitle: '',
     headerStyle: {
@@ -32,7 +40,11 @@ export function feed_detail(props) {
 
   const _Commentsactualite = () => {
     const actualite_id = actualite.id
-    props.navigation.navigate('feed_comments', { actualite_id })
+    props.navigation.navigate('feed_comments', {
+      actualite_id: actualite_id,
+      user_id: id,
+    }
+    )
   }
   token = async () => {
     try {
@@ -47,11 +59,33 @@ export function feed_detail(props) {
 
   useEffect(() => {
     token()
-  }, [])
+  }, [props.route.params.myid])
+
+  const handleOpen = () => {
+    setshow(true)
+  }
+
+
+
+  const handleCloseoui = () => {
+    props.navigation.navigate('Home')
+    setshow(false)
+
+  }
+ 
+  const handleClosenon = () => {
+    setshow(false)
+  }
 
 
   const onFinishRating = (number) => {
-    console.log('ratenumber' + number)
+    console.log(id)
+    if(id == null)
+    {
+      console.log(' not exist')
+      handleOpen()
+    }else{
+      console.log('exist')
     const url = `https://herokuuniv.herokuapp.com/api/Rating/${actualite.id}/rating/`
     fetch(url, {
       method: 'POST',
@@ -75,6 +109,7 @@ export function feed_detail(props) {
       }
 
       )
+    }
 
   }
 
@@ -109,14 +144,28 @@ export function feed_detail(props) {
         </Text>
         <Text style={styles.editeur}>Éditeur : {actualite.auteur.first_name}</Text>
       </View>
+      <SCLAlert
+          show={show}
+          onRequestClose={handleClosenon}
+          theme="info"
+          title="Title kbir"
+          subtitle="Merci de creer un compte d'abord"
+          headerIconComponent={<Ionicons name="ios-thumbs-up" size={32} color="white" />}
+        >
+          <SCLAlertButton theme="info" onPress={handleCloseoui}>Oui</SCLAlertButton>
+          <SCLAlertButton theme="default" onPress={handleClosenon}>non , Continuer</SCLAlertButton>
+        </SCLAlert>
+
+
       <AirbnbRating
         count={5}
         reviews={["Nul", "Mauvais", "Pas mal", "Bien", "Excellent"]}
         defaultRating={5}
         size={15}
         onFinishRating={onFinishRating}
-        defaultRating={0}
+        defaultRating={rateuser === null ? 0 : rateuser}
       />
+      {rateuser === null ?  null :<Text>vous avez votez :{rateuser}</Text>}
       <Text style={styles.vote}>Total des votes : {actualite.no_of_ratings}</Text>
       <Text style={styles.desc}> {actualite.Description} </Text>
     </ScrollView >

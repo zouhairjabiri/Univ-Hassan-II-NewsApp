@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage } from 'react-native';
-import { SimpleLineIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-
+import { FontAwesome, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 
 export function profile(props) {
 
   const [username, setusername] = useState('');
   const [firstname, setfirstname] = useState('');
   const [lastname, setlastname] = useState('');
+  const [email, setemail] = useState('');
 
   token = async () => {
     try {
       const getusername = await AsyncStorage.getItem('@username');
       const getfirstname = await AsyncStorage.getItem('@firstname');
       const getlastname = await AsyncStorage.getItem('@lastname');
+      const getemail = await AsyncStorage.getItem('@email');
       setusername(getusername)
       setfirstname(getfirstname)
       setlastname(getlastname)
+      setemail(getemail)
     } 
     catch (error) {console.error(error)}
   };
 
   useEffect(() => {
-    token()
+    token()    
    }, [])
 
   const logout = () => {
@@ -31,23 +32,43 @@ export function profile(props) {
     props.navigation.navigate('Home')
   }
   return (
+
+    
     <View>
       <View style={styles.header}></View>
-      <Image style={styles.avatar} source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} />
-      <View style={styles.body}>
-        <View style={styles.bodyContent}>
-          <Text style={styles.name}>{username}</Text>
-          <Text style={styles.info}> {firstname} - {lastname}</Text>
-          <TouchableOpacity style={styles.buttonContainer1} onPress={()=> props.navigation.navigate('editprofile')}>
-            <FontAwesome size={20} name='edit' color='#ffffff' />
-            <Text style={styles.but}>Edit Info</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => logout()} style={styles.buttonContainer2}>
-            <SimpleLineIcons size={20} name='logout' color='#ffffff' />
-            <Text style={styles.but}>   Logout</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      {username === null ?
+
+
+    <TouchableOpacity style={styles.buttonContainer1} onPress={()=> props.navigation.navigate('Home')}>
+    <AntDesign size={20} name='login' color='#ffffff' />
+    <Text  style={styles.but}>   Merci de s'authentifier</Text>
+  </TouchableOpacity>
+  
+  : 
+  
+  
+  <>
+<Image style={styles.avatar} source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} />
+<View style={styles.body}>
+  <View style={styles.bodyContent}>
+    <Text style={styles.name}>{username}</Text>
+    <Text style={styles.info}> {firstname} - {lastname}</Text>
+    <Text style={styles.info}>Email  : {email}</Text>
+    <TouchableOpacity style={styles.buttonContainer1} onPress={()=> props.navigation.navigate('editprofile')}>
+      <FontAwesome size={20} name='edit' color='#ffffff' />
+      <Text style={styles.but}>     Edit Info</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => logout()} style={styles.buttonContainer2}>
+      <SimpleLineIcons size={20} name='logout' color='#ffffff' />
+      <Text style={styles.but}>      Logout</Text>
+    </TouchableOpacity>
+  </View>
+</View>
+</>
+
+}
+
+     
     </View>
   );
 }

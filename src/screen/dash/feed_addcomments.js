@@ -53,25 +53,25 @@ export function feed_addcomments(props) {
     }
     return (
         <View>
+            <View style={styles.bord}>
+                <TextInput placeholder="Écrire un commentaire ..."
+                    style={styles.textInput}
+                    placeholderTextColor={'#000000'}
+                    value={comment}
+                    multiline={true}
+                    autoFocus = {true}
+                    onChangeText={text => setcomment(text)}
+                />
+            </View>
 
-                    <View style={styles.bord}>
-                    <TextInput placeholder="Écrire un commentaire ..."
-                        style={styles.textInput}
-                        placeholderTextColor={'#000000'}
-                        value={comment}
-                        multiline={true}
-                        onChangeText={text => setcomment(text)}
-                    />
-                    </View>
-
-                    <View style={styles.button}>
-                        <Button onPress={addcomment} round size="small" color="#245591">
-                            Confirmer
+            <View style={styles.button}>
+                <Button onPress={addcomment} round size="small" color="#245591">
+                    Confirmer
                     </Button>
-                    </View>
-                </View>
+            </View>
+        </View>
     )
-    
+
 }
 
 
@@ -79,20 +79,21 @@ const styles = StyleSheet.create({
     textInput: {
         fontSize: 15,
         color: '#000000',
-        height: 120,
         marginLeft: 10,
         marginRight: 10,
+        marginTop: 10,
+        marginBottom: 10,
     },
     bord: {
+        height: 120,
         borderWidth: 0.5,
         borderRadius: 12,
         marginTop: 50,
         marginBottom: 40,
         marginLeft: 20,
         marginRight: 20,
-        alignItems: 'flex-start',
     },
-    button:{
+    button: {
         alignItems: 'flex-start',
         marginLeft: 20,
         marginRight: 20,

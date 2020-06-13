@@ -19,6 +19,12 @@ import { feed_addcomments } from './screen/dash/feed_addcomments';
 import { filterbynumberrate } from './screen/dash/filtrage/filterbynumberrate';
 import { filterbyratenumber } from './screen/dash/filtrage/filterbyratenumber';
 import { filterbycomments } from './screen/dash/filtrage/filterbycomments';
+
+import { filterday } from './screen/dash/filtragebydate/filterday';
+import { filtersemaine } from './screen/dash/filtragebydate/filtersemaine';
+import { filtermonth } from './screen/dash/filtragebydate/filtermonth';
+
+
 import { profile } from './screen/dash/profile';
 import { HomeScreen } from './screen/home/HomeScreen';
 import { Sidebar } from './screen/dash/Sidebar';
@@ -60,6 +66,10 @@ function Stackscreen({ navigation, route, props }) {
       <Stack.Screen name="filterbynumberrate" component={filterbynumberrate}/>
       <Stack.Screen name="filterbyratenumber" component={filterbyratenumber}/>
       <Stack.Screen name="filterbycomments" component={filterbycomments}/>
+
+      <Stack.Screen name="filterday" component={filterday}/>
+      <Stack.Screen name="filtersemaine" component={filtersemaine}/>
+      <Stack.Screen name="filtermonth" component={filtermonth}/>
       <Stack.Screen name="editprofile" component={editprofile}/>
     </Stack.Navigator>
   );

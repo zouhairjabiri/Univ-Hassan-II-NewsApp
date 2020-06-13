@@ -13,7 +13,7 @@ import {
   Fade
 } from "rn-placeholder";
 
-export function filterbycomments(props) {
+export function filterday(props) {
 
   const [data, setdata] = useState([]);
   const [isFetching, setisFetching] = useState(false);
@@ -21,8 +21,9 @@ export function filterbycomments(props) {
 
   props.navigation.setOptions({
     headerTitle: () => <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-      <Text style={styles.Title}>Les plus commentées</Text>
-      <MaterialIcons style={{ marginLeft: 5 }} name="chat" size={30} color="#d3d0d2" />
+      <Text style={styles.Title}>Dernier 24 heures</Text>
+      <MaterialIcons name="update"  style={{ marginLeft: 5 }} size={30} color="#d3d0d2" />
+
     </View>,
     headerStyle: {
       backgroundColor: '#245591',
@@ -34,7 +35,7 @@ export function filterbycomments(props) {
   })
 
   useEffect(() => {
-    fetch('https://herokuuniv.herokuapp.com/api/Actualite/getactualitesbycomments/', {
+    fetch('https://herokuuniv.herokuapp.com/api/Actualite/getactualitesby24hours/', {
       method: 'GET',
       headers: {
         Accept:
@@ -129,7 +130,7 @@ export function filterbycomments(props) {
   )
 }
 
-export default filterbycomments
+export default filterday
 
 const styles = StyleSheet.create({
   container: {

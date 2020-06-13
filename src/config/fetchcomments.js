@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native'
-import { Divider } from 'react-native-elements';
 import moment from "moment";
 
 
@@ -24,7 +23,7 @@ export function fetchcomments(id, props) {
       .then(res => {
         setdata(res)
         setisFetching(false)
-  
+
       })
 
     setbegin(false)
@@ -47,7 +46,7 @@ export function fetchcomments(id, props) {
       .then(res => {
         setdata(res)
         setisFetching(false)
-  
+
       })
 
     setbegin(false)
@@ -62,9 +61,18 @@ export function fetchcomments(id, props) {
     <View style={styles.container}>
       {begin ? <ActivityIndicator animating size="large" /> : null}
       {data.length < 1 ?
-                <Text>Soyez le premier à commenter !!</Text>
-        : null        
-        }
+        <>
+          <View style={styles.nocom}>
+            <Image
+              style={styles.emptylogo}
+              source={require('../image/no-data-found2.png')}
+            />
+            <Text style={styles.nocomments}>Soyez le premier à commenter !!</Text>
+            <Text style={styles.nocomments}>Cliquez sur le bouton "+"</Text>
+          </View>
+        </>
+        : null
+      }
       <FlatList
         data={data}
         onRefresh={() => onRefresh()}
@@ -83,25 +91,26 @@ export function fetchcomments(id, props) {
           </View>
         }
       />
-         {data.length < 1 ?
-              <>
-                <Image
-                  style={styles.emptylogo}
-                  source={require('../image/nocomments.png')}
-                />
-              </>
-              : null
-            }
-
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   emptylogo: {
-    // marginTop: 50,
-    width: '100%',
-    height: '60%',
+    width: 200,
+    height: 200,
+    opacity: 0.3,
+    alignSelf: "center",
+    marginBottom: 30
+  },
+  nocom: {
+    marginTop: 100
+  },
+  nocomments: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#696969",
+    textAlign: "center",
   },
   container: {
     flex: 1,
@@ -110,7 +119,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 1,
   },
   textContainer: {
-    backgroundColor: "#dce8f7",
+    backgroundColor: "#DFEFFF",
     marginLeft: 10,
     marginRight: 10,
     marginTop: 3,

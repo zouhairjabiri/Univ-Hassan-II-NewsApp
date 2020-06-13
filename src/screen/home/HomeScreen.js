@@ -1,14 +1,26 @@
 import React from 'react'
-import { View, StyleSheet, Image } from 'react-native'
+import { View, StyleSheet, Image, AsyncStorage } from 'react-native'
 
 import { Text, Button } from 'galio-framework';
 
-
+import { AntDesign } from '@expo/vector-icons'; 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 export function HomeScreen(props) {
 
-
+const Gowithoutlogin = () =>
+{
+  AsyncStorage.clear()
+  props.navigation.navigate('Tabscreen',{screen: 'Drawerscreen'})
+}
   return (
-    <View style={styles.container}>
+
+  
+       <View style={styles.container}>
+         <TouchableOpacity  onPress={() => props.  navigation.navigate('Tabscreen', {
+              screen: 'Drawerscreen'})}>
+            <AntDesign name="closesquare" size={30} color="#FFF" />
+         </TouchableOpacity>
+
       <Text style={styles.para}>Bienvenue sur notre application !</Text>
       <Text style={styles.para2}>Université Hassan ll de Casablanca</Text>
 
@@ -24,7 +36,17 @@ export function HomeScreen(props) {
       <Button style={{ marginTop: 10 }} round size="small" color="#648cb4"
         onPress={() => props.navigation.navigate('signup')}>
         S'incrire</Button>
+
+
+        <Button style={{ marginTop: 10 }} round size="small" color="#648cb4"
+        onPress={() => Gowithoutlogin()}>
+        Consulter sans Auth
+        </Button>
+
+
     </View>
+
+
   );
 }
 
@@ -38,6 +60,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  container1:
+  {
+    backgroundColor: '#245591',
+    flex: 1,
+
   },
   logo:{
     width: '50%',

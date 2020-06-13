@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native'
 import moment from "moment";
-import { MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { MaterialIcons, FontAwesome , MaterialCommunityIcons} from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-
-
-
+import {  } from '@expo/vector-icons'; 
 import {
   Placeholder,
   PlaceholderMedia,
@@ -13,7 +11,8 @@ import {
   Fade
 } from "rn-placeholder";
 
-export function filterbycomments(props) {
+
+export function filtersemaine(props) {
 
   const [data, setdata] = useState([]);
   const [isFetching, setisFetching] = useState(false);
@@ -21,8 +20,9 @@ export function filterbycomments(props) {
 
   props.navigation.setOptions({
     headerTitle: () => <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-      <Text style={styles.Title}>Les plus commentées</Text>
-      <MaterialIcons style={{ marginLeft: 5 }} name="chat" size={30} color="#d3d0d2" />
+      <Text style={styles.Title}>Cette semaine</Text>
+      <MaterialCommunityIcons />
+      <MaterialCommunityIcons name="calendar-week" style={{ marginLeft: 5 }}  size={30} color="#d3d0d2"  />
     </View>,
     headerStyle: {
       backgroundColor: '#245591',
@@ -32,9 +32,8 @@ export function filterbycomments(props) {
         <AntDesign name="back" size={30} style={styles.icons} />
       </TouchableOpacity>,
   })
-
   useEffect(() => {
-    fetch('https://herokuuniv.herokuapp.com/api/Actualite/getactualitesbycomments/', {
+    fetch('https://herokuuniv.herokuapp.com/api/Actualite/getactualitesbySemaine/', {
       method: 'GET',
       headers: {
         Accept:
@@ -55,24 +54,23 @@ export function filterbycomments(props) {
   const onRefresh = () => {
     setisFetching(true)
   }
-
-
   return (
     <View>
-      {begin ?
-        <Placeholder
-          style={{ marginTop: 90 }}
-          Animation={Fade}
-          Left={PlaceholderMedia}
-          Right={PlaceholderMedia}
-        >
-          <PlaceholderLine width={80} />
-          <PlaceholderLine style={{ backgroundColor: "#245591" }} />
-          <PlaceholderLine width={30} />
-        </Placeholder>
-        : null}
-
-      <View style={styles.container}>
+     {begin ? 
+      <Placeholder
+        style={{marginTop:90}}
+    Animation={Fade}
+    Left={PlaceholderMedia}
+    Right={PlaceholderMedia}
+  >
+    <PlaceholderLine width={80} />
+    <PlaceholderLine style={{ backgroundColor: "#245591" }}/>
+    <PlaceholderLine width={30} />
+  </Placeholder>
+   :  null}
+   
+   
+         <View style={styles.container}>
         <FlatList style={styles.list}
           data={data}
           onRefresh={() => onRefresh()}
@@ -106,7 +104,8 @@ export function filterbycomments(props) {
                     <View>
                       <Text style={styles.dateCreated}>{moment(item.DatePublication, "YYYY-MM-DD[escaped]hh-mm-ss").fromNow()}
                       </Text>
-                      <Text style={styles.dateCreated}>Nombre de commentaires : {item.no_of_comments}</Text>
+                      <Text style={styles.dateCreated}>Nombre de votes : {item.no_of_ratings}</Text>
+
                       <Text style={styles.title}>{item.Titre}</Text>
                     </View>
                   </View>
@@ -129,7 +128,7 @@ export function filterbycomments(props) {
   )
 }
 
-export default filterbycomments
+export default filtersemaine;
 
 const styles = StyleSheet.create({
   container: {

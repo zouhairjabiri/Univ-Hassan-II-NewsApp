@@ -2,13 +2,18 @@ import React, { useState } from 'react'
 import { View, StyleSheet, ActivityIndicator, AsyncStorage, Image, TextInput } from 'react-native'
 import { Text, Button } from 'galio-framework'
 import Loader from '../../config/Loader'
-import PasswordTextBox from './PasswordTextBox'
+
+import { Item, Input } from 'native-base';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 const Login = ({ navigation }) => {
-  const [username, setusername] = useState({ value: 'admin', error: '' });
-  const [password, setPassword] = useState({ value: 'admin', error: '' });
+  const [username, setusername] = useState({ value: '', error: ''});
+  const [password, setPassword] = useState({ value: '', error: ''});
   const [error, seterror] = useState('');
   const [loadingstate, setloadingstate] = useState(false);
+  const [icon, seticon] = useState("eye");
+  const [PasswordTextBox, setPasswordTextBox] = useState(true);
 
   async function token(key, value) {
     try {
@@ -44,9 +49,16 @@ const Login = ({ navigation }) => {
             token('@firstname', res.First_name)
             token('@lastname', res.Last_name)
             token('@username', res.username)
+            token('@email', res.email)
             setloadingstate(false)
-            navigation.navigate('Tabscreen', {
-              screen: 'Drawerscreen'})
+            const myid =  res.id
+            console.log(myid);
+            
+            navigation.navigate(
+              'Tabscreen', {
+              screen: 'Drawerscreen',
+              params : {myid}
+            })
 
           } else {
             setusername({ value: '' })
@@ -63,6 +75,17 @@ const Login = ({ navigation }) => {
     }
   };
 
+
+
+  const _changeIcon = () =>{
+    if(icon == 'eye-slash')
+    {
+      seticon('eye')
+    }
+    
+    setPasswordTextBox(!PasswordTextBox)
+}
+
   return (
 
     <View style={styles.container}>
@@ -73,16 +96,24 @@ const Login = ({ navigation }) => {
       />
       <Loader loading={loadingstate} />
 
-      <TextInput placeholder="Nom d'utilisateur"
+      <TextInput placeholder="Pseudo"
         style={styles.textInput}
         value={username.value}
         onChangeText={text => setusername({ value: text, error: '' })}
         placeholderTextColor={'#d3d0d2'} />
+             <Item style={styles.textInput1}>
+                <FontAwesome active name="lock" color='#ffffff' size={18}/>
+                <Input
+                    style={{ fontSize: 15, color: '#fff', paddingLeft: 10, height: 40}}
+                    placeholder='Mot de passe'
+                    placeholderTextColor={'#d3d0d2'}
+                    value={password.value}
+                    secureTextEntry={PasswordTextBox}
+                    onChangeText={text => setPassword({ value: text, error: '' })}/>
+                <FontAwesome name={icon} color='#ffffff' size={18} onPress={_changeIcon} />
+            </Item>
 
-      <PasswordTextBox
-        icon="lock"
-        value={password.value}
-        onChange={text => setPassword({ value: text, error: '' })} />
+
 
       <Text style={styles.error}>{error}</Text>
 
@@ -109,6 +140,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textInput1: {
+    width: '75%',
+    borderBottomColor: '#d3d0d2',
+    borderBottomWidth: 1,
+    marginBottom: 25,
+},
   logo: {
     width: '40%',
     height: '12%',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react'
-import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native'
+import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity, AsyncStorage, TextInput } from 'react-native'
 import moment from "moment";
 import { MaterialCommunityIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
@@ -21,19 +21,17 @@ export function feed_home(props) {
   const [issearching, setisissearching] = useState(false);
   const [query, setquery] = useState('');
   const [begin, setbegin] = useState(true);
+  const [id, setid] = useState('');
 
   // Get The Parent's Header : 
   const myheader = props.navigation.dangerouslyGetParent()
 
-
-
-
   function mycustomheaderTitle() {
-    if (issearching) {
+    if (issearching) 
+    {
       return (
         <View style={styles.searchSection}>
-          
-          <TouchableOpacity onPress={() => { setisissearching(!issearching), setquery('') }}>
+          <TouchableOpacity onPress={() => { props.navigation.dispatch(DrawerActions.closeDrawer()) , setisissearching(!issearching), setquery('')}}>
             <AntDesign name="back" size={30} style={styles.iconclose} />
           </TouchableOpacity>
           <TextInput placeholder="Recherche"
@@ -48,9 +46,7 @@ export function feed_home(props) {
         <View style={{ alignContent: 'center', alignItems: 'center' }}>
           <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>Université Hassan II</Text>
         </View>
-
       )
-
     }
   }
 
@@ -62,7 +58,7 @@ export function feed_home(props) {
       )
     } else {
       return (
-        <TouchableOpacity onPress={() => { setisissearching(!issearching) }}>
+        <TouchableOpacity onPress={() => { setisissearching(!issearching)}}>
           <View >
             <Ionicons name="ios-search" size={30} style={styles.icons} />
           </View>
@@ -116,6 +112,8 @@ export function feed_home(props) {
 
 
   useEffect(() => {
+    token()    
+
     fetch('https://herokuuniv.herokuapp.com/api/Actualite/', {
       method: 'GET',
       headers: {
@@ -132,11 +130,20 @@ export function feed_home(props) {
         setisFetching(false)
       })
       .catch(error => console.log(error))
+      
   }, [isFetching]);
 
   const onRefresh = () => {
     setisFetching(true)
   }
+
+  token = async () => {
+    try {
+      const getid = await AsyncStorage.getItem('@id');
+      setid(getid)
+    } 
+    catch (error) {console.error(error)}
+  };
 
   return (
     <View>
@@ -169,7 +176,31 @@ export function feed_home(props) {
             const item = post.item;
             const _actualiteclicked = (actualite) => {
               setquery('')
-              props.navigation.navigate('feed_detail', { actualite })
+              fetch(`https://herokuuniv.herokuapp.com/api/Rating/${actualite.id}/getuserrating/`, {
+                method: 'POST',
+                headers: {
+                  Accept:
+                    'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': `Token 6819607706a0d0c9702f16fb77750667e8ab684a`
+                },
+                body: JSON.stringify({
+                  id: id,
+                }),
+              }).then(res => res.json())
+                .then(res => {
+                  const rateuser = null
+                  if (res.message) {
+                    const rateuser = res.rate
+                    props.navigation.navigate('feed_detail', { actualite, rateuser})
+
+                  } else {
+                    props.navigation.navigate('feed_detail', { actualite , rateuser})
+
+                  }
+                 
+                })
+              
             }
             return (
               <View style={styles.container}>

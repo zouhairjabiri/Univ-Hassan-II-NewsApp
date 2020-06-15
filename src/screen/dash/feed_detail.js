@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ImageBackground, ScrollView, AsyncStorage,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, ScrollView, AsyncStorage, TouchableOpacity } from 'react-native';
 import { AirbnbRating } from 'react-native-elements';
-import { FontAwesome,MaterialIcons, AntDesign,Entypo,Ionicons } from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons, AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 import {
   SCLAlert,
   SCLAlertButton
@@ -16,26 +16,26 @@ export function feed_detail(props) {
   const [id, setid] = useState('');
   const [message, setmessage] = useState('');
   const [show, setshow] = useState(false);
- 
+
   props.navigation.setOptions({
     headerTitle: '',
     headerStyle: {
       backgroundColor: '#245591',
     },
-    
+
     headerRight: () =>
-      <View style={{flexDirection:'row'}}>
-      <TouchableOpacity>
-      <Entypo name="share" size={30} style={styles.icons}/>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {_Commentsactualite() }}>
-      <MaterialIcons name="comment" size={30} style={styles.icons} />
-      </TouchableOpacity>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity>
+          <Entypo name="share" size={30} style={styles.icons} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => { _Commentsactualite() }}>
+          <MaterialIcons name="comment" size={30} style={styles.icons} />
+        </TouchableOpacity>
       </View>,
-        headerLeft: () =>
-        <TouchableOpacity  onPress={() => { props.navigation.goBack()   }}>
-          <AntDesign name="back"  size={30} style={styles.icons}/>
-        </TouchableOpacity>,
+    headerLeft: () =>
+      <TouchableOpacity onPress={() => { props.navigation.goBack() }}>
+        <AntDesign name="back" size={30} style={styles.icons} />
+      </TouchableOpacity>,
   })
 
   const _Commentsactualite = () => {
@@ -72,43 +72,39 @@ export function feed_detail(props) {
     setshow(false)
 
   }
- 
+
   const handleClosenon = () => {
     setshow(false)
   }
 
 
   const onFinishRating = (number) => {
-    console.log(id)
-    if(id == null)
-    {
-      console.log(' not exist')
+    if (id == null) {
       handleOpen()
-    }else{
-      console.log('exist')
-    const url = `https://herokuuniv.herokuapp.com/api/Rating/${actualite.id}/rating/`
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Accept:
-          'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
-      },
-      body: JSON.stringify({
-        id: id,
-        rate: number,
-      }),
-    }).then(res => res.json())
-      .then(res => {
-        if (res.message === 'Succed') {
-          alert(username + ':  Merci pour votre évaluation ')
-        } else {
-          alert(username + ':  la modification est enregistrer')
+    } else {
+      const url = `https://herokuuniv.herokuapp.com/api/Rating/${actualite.id}/rating/`
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept:
+            'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
+        },
+        body: JSON.stringify({
+          id: id,
+          rate: number,
+        }),
+      }).then(res => res.json())
+        .then(res => {
+          if (res.message === 'Succed') {
+            alert(username + ':  Merci pour votre évaluation ')
+          } else {
+            alert(username + ':  la modification est enregistrer')
+          }
         }
-      }
 
-      )
+        )
     }
 
   }
@@ -144,29 +140,21 @@ export function feed_detail(props) {
         </Text>
         <Text style={styles.editeur}>Éditeur : {actualite.auteur.first_name}</Text>
       </View>
-      <SCLAlert
-          show={show}
-          onRequestClose={handleClosenon}
-          theme="info"
-          title="Title kbir"
-          subtitle="Merci de creer un compte d'abord"
-          headerIconComponent={<Ionicons name="ios-thumbs-up" size={32} color="white" />}
-        >
-          <SCLAlertButton theme="info" onPress={handleCloseoui}>Oui</SCLAlertButton>
-          <SCLAlertButton theme="default" onPress={handleClosenon}>non , Continuer</SCLAlertButton>
-        </SCLAlert>
 
+      {username === null ? null :
+        <View>
+          <AirbnbRating
+            count={5}
+            reviews={["Nul", "Mauvais", "Pas mal", "Bien", "Excellent"]}
+            defaultRating={5}
+            size={15}
+            onFinishRating={onFinishRating}
+            defaultRating={rateuser === null ? 0 : rateuser}
+          />
+          <Text style={styles.vote}>Total des votes : {actualite.no_of_ratings}</Text>
+        </View>
+      }
 
-      <AirbnbRating
-        count={5}
-        reviews={["Nul", "Mauvais", "Pas mal", "Bien", "Excellent"]}
-        defaultRating={5}
-        size={15}
-        onFinishRating={onFinishRating}
-        defaultRating={rateuser === null ? 0 : rateuser}
-      />
-      {rateuser === null ?  null :<Text>vous avez votez :{rateuser}</Text>}
-      <Text style={styles.vote}>Total des votes : {actualite.no_of_ratings}</Text>
       <Text style={styles.desc}> {actualite.Description} </Text>
     </ScrollView >
   );
@@ -174,7 +162,7 @@ export function feed_detail(props) {
 
 const styles = StyleSheet.create({
   desc: {
-    marginTop: 25,
+    marginTop: 50,
     marginBottom: 50,
     fontSize: 15,
     textAlign: 'left',

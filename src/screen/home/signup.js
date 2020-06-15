@@ -32,57 +32,56 @@ const signup = ({ navigation }) => {
   const _onSignupPressed = () => {
     if (username.value.length > 0 && password.value.length > 0 && email.value.length > 0 && firstname.value.length > 0 &&
       lastname.value.length > 0) {
-        <ActivityIndicator size="large" color="#0000ff" />
-        setloadingstate(true)
-        fetch('https://herokuuniv.herokuapp.com/api/User/create_account/', {
-          method: 'POST',
-          headers: {
-            Accept:
-              'application/json',
-            'Content-Type': 'application/json',
-          },
+      <ActivityIndicator size="large" color="#0000ff" />
+      setloadingstate(true)
+      fetch('https://herokuuniv.herokuapp.com/api/User/create_account/', {
+        method: 'POST',
+        headers: {
+          Accept:
+            'application/json',
+          'Content-Type': 'application/json',
+        },
 
-          body: JSON.stringify({
-            username: username.value,
-            password: password.value,
-            first_name: firstname.value,
-            last_name: lastname.value,
-            email: email.value,
-          }),
-        }).then(res => res.json())
-          .then(res => {
-            setloadingstate(false)
-            if (res.token && res.message) {
-              token('@token', res.token)
-              token('@id', res.id.toString())
-              token('@firstname', res.First_name)
-              token('@lastname', res.Last_name)
-              token('@username', res.username)
-              token('@email', res.email)
-              navigation.navigate('Tabscreen', {
-                screen: 'Drawerscreen',
-              }
-              )
+        body: JSON.stringify({
+          username: username.value,
+          password: password.value,
+          first_name: firstname.value,
+          last_name: lastname.value,
+          email: email.value,
+        }),
+      }).then(res => res.json())
+        .then(res => {
+          setloadingstate(false)
+          if (res.token && res.message) {
+            token('@token', res.token)
+            token('@id', res.id.toString())
+            token('@firstname', res.First_name)
+            token('@lastname', res.Last_name)
+            token('@username', res.username)
+            token('@email', res.email)
+            navigation.navigate('Tabscreen', {
+              screen: 'Drawerscreen',
             }
-            else {
-              setfirstname({ value: '' })
-              setlastname({ value: '' })
-              setusername({ value: '' })
-              setPassword({ value: '' })
-              setemail({ value: '' })
-              if(!res.message)
-              {
-                seterror("email est invalid")
-
-              }else{
-                seterror(res.message)
-              }
-              
-            }
+            )
           }
-          )
-          .catch(error => console.log(error))
-      
+          else {
+            setfirstname({ value: '' })
+            setlastname({ value: '' })
+            setusername({ value: '' })
+            setPassword({ value: '' })
+            setemail({ value: '' })
+            if (!res.message) {
+              seterror("Email invalide !")
+
+            } else {
+              seterror(res.message)
+            }
+
+          }
+        }
+        )
+        .catch(error => console.log(error))
+
     } else {
       setfirstname({ value: '' })
       setlastname({ value: '' })
@@ -113,6 +112,7 @@ const signup = ({ navigation }) => {
     seterror('')
     navigation.navigate('Login')
   }
+
   return (
     <View style={styles.container}>
       <Text style={styles.para2}>Université Hassan ll de Casablanca</Text>
@@ -120,7 +120,6 @@ const signup = ({ navigation }) => {
         style={styles.logo}
         source={require('../../image/Logo-UHllC-White.png')}
       />
-      <Loader loading={loadingstate} />
       <TextInput
         value={firstname.value}
         style={styles.textInput}
@@ -158,11 +157,11 @@ const signup = ({ navigation }) => {
         <FontAwesome name={icon} color='#ffffff' size={18} onPress={_changeIcon} />
       </Item>
 
-
-
-      <Button style={{ marginTop: 30 }} round size="small" color="#648cb4" onPress={_onSignupPressed}>
-        S'incrire</Button>
       <Text style={styles.error}>{error}</Text>
+      <Button style={{ marginTop: 10 }} round size="small" color="#648cb4" onPress={_onSignupPressed}>
+        S'incrire</Button>
+
+      <Loader loading={loadingstate} />
 
       <Text style={{ marginTop: 60, color: '#ffffff' }}> Si vous avez déjà un compte, identifiez-vous.</Text>
       <Button
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
     width: '40%',
     height: '12%',
     marginTop: 10,
-    marginBottom: 60,
+    marginBottom: 50,
   },
   textInput1: {
     width: '75%',
@@ -219,6 +218,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 20,
     marginRight: 20,
+    marginTop: 30
   }
 }
 );

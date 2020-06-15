@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 import { View, StyleSheet, ActivityIndicator, AsyncStorage, Image, TextInput } from 'react-native'
 import { Text, Button } from 'galio-framework'
 import Loader from '../../config/Loader'
-
 import { Item, Input } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 
 
 const Login = ({ navigation }) => {
-  const [username, setusername] = useState({ value: '', error: ''});
-  const [password, setPassword] = useState({ value: '', error: ''});
+  const [username, setusername] = useState({ value: '', error: '' });
+  const [password, setPassword] = useState({ value: '', error: '' });
   const [error, seterror] = useState('');
   const [loadingstate, setloadingstate] = useState(false);
   const [icon, seticon] = useState("eye");
@@ -51,13 +50,11 @@ const Login = ({ navigation }) => {
             token('@username', res.username)
             token('@email', res.email)
             setloadingstate(false)
-            const myid =  res.id
-            console.log(myid);
-            
+            const myid = res.id
             navigation.navigate(
               'Tabscreen', {
               screen: 'Drawerscreen',
-              params : {myid}
+              params: { myid }
             })
 
           } else {
@@ -77,14 +74,13 @@ const Login = ({ navigation }) => {
 
 
 
-  const _changeIcon = () =>{
-    if(icon == 'eye-slash')
-    {
+  const _changeIcon = () => {
+    if (icon == 'eye-slash') {
       seticon('eye')
     }
-    
+
     setPasswordTextBox(!PasswordTextBox)
-}
+  }
 
   return (
 
@@ -94,24 +90,23 @@ const Login = ({ navigation }) => {
         style={styles.logo}
         source={require('../../image/Logo-UHllC-White.png')}
       />
-      <Loader loading={loadingstate} />
 
       <TextInput placeholder="Pseudo"
         style={styles.textInput}
         value={username.value}
         onChangeText={text => setusername({ value: text, error: '' })}
         placeholderTextColor={'#d3d0d2'} />
-             <Item style={styles.textInput1}>
-                <FontAwesome active name="lock" color='#ffffff' size={18}/>
-                <Input
-                    style={{ fontSize: 15, color: '#fff', paddingLeft: 10, height: 40}}
-                    placeholder='Mot de passe'
-                    placeholderTextColor={'#d3d0d2'}
-                    value={password.value}
-                    secureTextEntry={PasswordTextBox}
-                    onChangeText={text => setPassword({ value: text, error: '' })}/>
-                <FontAwesome name={icon} color='#ffffff' size={18} onPress={_changeIcon} />
-            </Item>
+      <Item style={styles.textInput1}>
+        <FontAwesome active name="lock" color='#ffffff' size={18} />
+        <Input
+          style={{ fontSize: 15, color: '#fff', paddingLeft: 10, height: 40 }}
+          placeholder='Mot de passe'
+          placeholderTextColor={'#d3d0d2'}
+          value={password.value}
+          secureTextEntry={PasswordTextBox}
+          onChangeText={text => setPassword({ value: text, error: '' })} />
+        <FontAwesome name={icon} color='#ffffff' size={18} onPress={_changeIcon} />
+      </Item>
 
 
 
@@ -120,7 +115,9 @@ const Login = ({ navigation }) => {
       <Button onPress={_onLoginPressed} style={{ marginTop: 10 }} round size="small" color="#648cb4">
         Login </Button>
 
-      <Text style={{ marginTop: 110, color: '#ffffff' }}> Vous n'avez pas de compte ? </Text>
+      <Loader loading={loadingstate} />
+
+      <Text style={{ marginTop: 150, color: '#ffffff' }}> Vous n'avez pas de compte ? </Text>
 
       <Button
         onPress={() => navigation.navigate('signup', { signup: 'gi' })}
@@ -145,12 +142,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#d3d0d2',
     borderBottomWidth: 1,
     marginBottom: 25,
-},
+  },
   logo: {
     width: '40%',
     height: '12%',
     marginTop: 10,
-    marginBottom: 60,
+    marginBottom: 80,
   },
   textInput: {
     height: 40,
@@ -188,6 +185,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 20,
     marginRight: 20,
+    marginTop: 40
   }
 }
 );

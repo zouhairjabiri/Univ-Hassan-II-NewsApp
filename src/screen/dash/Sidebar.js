@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AntDesign, MaterialIcons, FontAwesome , MaterialCommunityIcons} from '@expo/vector-icons';
+import { AntDesign, MaterialIcons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export function Sidebar(props) {
@@ -60,107 +60,102 @@ export function Sidebar(props) {
 
         focused="true"
       />
-<TouchableOpacity onPress={() => { setdropdown1(!dropdown1) }}>
+      <TouchableOpacity onPress={() => { setdropdown1(!dropdown1) }}>
 
-<DrawerItem
-        label={
-          () =>
-            <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.act}>filtrer par date</Text>
-              {dropdown1 ?
-                <AntDesign name="caretdown" size={15} color="#245591" style={{marginLeft: 25}} />
-                : 
-                <AntDesign name="caretup" size={15} color="#245591" style={{marginLeft: 25}} />
-              }
+        <DrawerItem
+          label={
+            () =>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.act}>Trier par date</Text>
+                {dropdown1 ?
+                  <AntDesign name="caretup" size={15} color="#245591" style={{ marginLeft: 70 }} />
+                  :
+                  <AntDesign name="caretdown" size={15} color="#245591" style={{ marginLeft: 70 }} />
+                }
 
-            </View>
-        }
-        icon={() =>
-            <MaterialIcons name="date-range" style={{ marginLeft: 5 }}   size={25} color="#245591" />
-        }
-        focused="true"
-      />
-                    </TouchableOpacity>
+              </View>
+          }
+          icon={() =>
+            <MaterialIcons name="date-range" style={{ marginLeft: 5 }} size={25} color="#245591" />
+          }
+          focused="true"
+        />
+      </TouchableOpacity>
 
       {dropdown1 ?
-         <>
-         <View>
-          <DrawerItem
-            label={() => <View><Text style={styles.catnames}>Dernier 24H</Text></View>}
-            onPress={() => props.navigation.navigate('filterday')}
-            icon={() => <View style={styles.drawer}>
-              <MaterialIcons name="update"  size={25} style={styles.icons} />
-            </View>}
-          />
-           <DrawerItem
-            label={() => <View><Text style={styles.catnames}>Cette semaine</Text></View>}
-            onPress={() => props.navigation.navigate('filtersemaine')}
-            icon={() => <View style={styles.drawer}>
-              <MaterialCommunityIcons name="calendar-week" size={25} style={styles.icons}   />
-            </View>}
-          />
-           <DrawerItem
-            label={() => <View><Text style={styles.catnames}>ce Mois</Text></View>}
-            onPress={() => props.navigation.navigate('filtermonth')}
-            icon={() => <View style={styles.drawer}>
-              <MaterialCommunityIcons name="calendar-month" size={25} style={styles.icons}  />
-            </View>}
-          />
-        </View>
-     
-    </>
-         :
-       null
-      }
-
-
-
-
-
-
-
-<TouchableOpacity onPress={() => { setdropdown(!dropdown) }}>
-
-      <DrawerItem
-        label={
-          () =>
-            <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.act}>Triées par catégorie</Text>
-
-              {dropdown ?
-
-                <AntDesign name="caretdown" size={15} color="#245591" style={{marginLeft: 25}} />
-
-                : 
-                <AntDesign name="caretup" size={15} color="#245591" style={{marginLeft: 25}} />
-              }
-
-            </View>
-        }
-        icon={() =>
-            <MaterialIcons style={{ marginLeft: 5 }} name="filter-list" size={25} color="#245591" />
-        }
-        focused="true"
-      />
-                    </TouchableOpacity>
-
-      {dropdown ?
-        
         <>
-        {Categorie.map((item) =>
-          <View key={item.id}>
+          <View>
             <DrawerItem
-              label={() => <View><Text style={styles.catnames}>{item.Nom}</Text></View>}
-              onPress={() => categorieclicked(item.id, item.Nom)}
+              label={() => <View><Text style={styles.catnames}>Les dernières 24h</Text></View>}
+              onPress={() => props.navigation.navigate('filterday')}
               icon={() => <View style={styles.drawer}>
-                <MaterialIcons size={25} name={item.icon} style={styles.icons} />
+                <MaterialIcons name="update" size={25} style={styles.icons} />
+              </View>}
+            />
+            <DrawerItem
+              label={() => <View><Text style={styles.catnames}>Cette semaine</Text></View>}
+              onPress={() => props.navigation.navigate('filtersemaine')}
+              icon={() => <View style={styles.drawer}>
+                <MaterialCommunityIcons name="calendar-week" size={25} style={styles.icons} />
+              </View>}
+            />
+            <DrawerItem
+              label={() => <View><Text style={styles.catnames}>Ce mois</Text></View>}
+              onPress={() => props.navigation.navigate('filtermonth')}
+              icon={() => <View style={styles.drawer}>
+                <MaterialCommunityIcons name="calendar-month" size={25} style={styles.icons} />
               </View>}
             />
           </View>
-        )}
-      </>
+
+        </>
         :
-    null
+        null
+      }
+
+
+      <TouchableOpacity onPress={() => { setdropdown(!dropdown) }}>
+
+        <DrawerItem
+          label={
+            () =>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.act}>Trier par catégorie</Text>
+
+                {dropdown ?
+
+                  <AntDesign name="caretup" size={15} color="#245591" style={{ marginLeft: 35 }} />
+
+                  :
+                  <AntDesign name="caretdown" size={15} color="#245591" style={{ marginLeft: 35 }} />
+                }
+
+              </View>
+          }
+          icon={() =>
+            <MaterialIcons style={{ marginLeft: 5 }} name="filter-list" size={25} color="#245591" />
+          }
+          focused="true"
+        />
+      </TouchableOpacity>
+
+      {dropdown ?
+
+        <>
+          {Categorie.map((item) =>
+            <View key={item.id}>
+              <DrawerItem
+                label={() => <View><Text style={styles.catnames}>{item.Nom}</Text></View>}
+                onPress={() => categorieclicked(item.id, item.Nom)}
+                icon={() => <View style={styles.drawer}>
+                  <MaterialIcons size={25} name={item.icon} style={styles.icons} />
+                </View>}
+              />
+            </View>
+          )}
+        </>
+        :
+        null
       }
 
     </DrawerContentScrollView>

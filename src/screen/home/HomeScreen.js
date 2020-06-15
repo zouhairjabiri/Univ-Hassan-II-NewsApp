@@ -3,23 +3,23 @@ import { View, StyleSheet, Image, AsyncStorage } from 'react-native'
 
 import { Text, Button } from 'galio-framework';
 
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 export function HomeScreen(props) {
 
-const Gowithoutlogin = () =>
-{
-  AsyncStorage.clear()
-  props.navigation.navigate('Tabscreen',{screen: 'Drawerscreen'})
-}
+  const Gowithoutlogin = () => {
+    AsyncStorage.clear()
+    props.navigation.navigate('Tabscreen', { screen: 'Drawerscreen' })
+  }
   return (
 
-  
-       <View style={styles.container}>
-         <TouchableOpacity  onPress={() => props.  navigation.navigate('Tabscreen', {
-              screen: 'Drawerscreen'})}>
-            <AntDesign name="closesquare" size={30} color="#FFF" />
-         </TouchableOpacity>
+
+    <View style={styles.container}>
+      <View style={styles.skip}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Tabscreen', { screen: 'Drawerscreen' })}>
+          <AntDesign name="close" size={30} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
       <Text style={styles.para}>Bienvenue sur notre application !</Text>
       <Text style={styles.para2}>Université Hassan ll de Casablanca</Text>
@@ -38,9 +38,9 @@ const Gowithoutlogin = () =>
         S'incrire</Button>
 
 
-        <Button style={{ marginTop: 10 }} round size="small" color="#648cb4"
+      <Button style={{ marginTop: 10 }} round size="small" color="#648cb4"
         onPress={() => Gowithoutlogin()}>
-        Consulter sans Auth
+        Anonyme
         </Button>
 
 
@@ -59,16 +59,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#245591',
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-
-  container1:
-  {
-    backgroundColor: '#245591',
-    flex: 1,
-
+  skip: {
+    alignSelf: "flex-end",
+    marginRight: 15,
+    marginTop: 30,
+    marginBottom: 90
   },
-  logo:{
+  logo: {
     width: '50%',
     height: '15%',
     marginTop: 10,

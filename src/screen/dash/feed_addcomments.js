@@ -30,9 +30,6 @@ export function feed_addcomments(props) {
     }, [])
 
     const addcomment = () => {
-        console.log(user_id)
-        console.log(comment)
-        console.log(props.route.params.actualite_id)
         const { actualite_id } = props.route.params
         const url = `https://herokuuniv.herokuapp.com/api/Comment/`
         fetch(url, {

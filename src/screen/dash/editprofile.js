@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage, TextInput,ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage, TextInput, ScrollView } from 'react-native';
 import { Button } from 'galio-framework'
-import { FontAwesome,MaterialIcons, AntDesign,Entypo,Ionicons,SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons, AntDesign, Entypo, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import {
   SCLAlert,
   SCLAlertButton
@@ -34,6 +34,10 @@ const editprofile = (props) => {
   const [id, setid] = useState('');
   const [message, setmessage] = useState('');
   const [show, setshow] = useState(false);
+
+
+   
+
 
   token = async () => {
     try {
@@ -70,116 +74,121 @@ const editprofile = (props) => {
     setshow(false)
 
   }
- 
-  const handleClosenon = () => {
-    setshow(false)
-  }
-  // const updateaccount = () =>
-  // {
-  //   if (username.value.length > 0 && firstname.value.length > 0 &&
-  //     lastname.value.length > 0) {
-  //       const url = `https://herokuuniv.herokuapp.com/api/User/${id}/`
-  //       fetch(url, {
-  //         method: 'PUT',
-  //         headers: {
-  //           Accept:
-  //             'application/json',
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           first_name: firstname,
-  //           last_name: lastname,
-  //           username: username,
-  //           email: email,
-  //           password: password,
-  //         }),
-  //       }).then(res => res.json())
-  //         .then(res => {
-  //           // if(res.username[0] === "A user with that username already exists.")
-  //           if(res.id)
-  //           {
-  //             setusername(res.username)
-  //             setfirstname(res.firstname)
-  //             setlastname(res.lastname)
-  //             handleOpen()
-  //           }else
-  //           {
-  //             setmessage(res.username[0]);
-  //           }
-           
-            
-  //         }
-  //         )
-  //     }else
-  //     {
-  //       setmessage("Veuillez remplir tous les champs !")
-  //     }
-    
 
-  // }
+  const handleClosenon = () => {
+ 
+    setshow(false)
+    props.navigation.navigate('Tabscreen', {
+      screen: 'profile',
+      params: { user: true },
+    })
+   }
+  const updateaccount = () =>
+  {
+    if (username.length > 0 && firstname.length > 0 && email.length > 0 &&
+      lastname.length > 0) {
+        const url = `https://herokuuniv.herokuapp.com/api/User/${id}/update_account/`
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            Accept:
+              'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            first_name: firstname,
+            last_name: lastname,
+            username: username,
+            email: email,
+          }),
+        }).then(res => res.json())
+          .then(res => {   
+            console.log(res.message);
+                     
+            if(res.message === true)
+            {
+              setusername(res.username)
+              setfirstname(res.First_name)
+              setlastname(res.Last_name)
+              setemail(res.email)
+              handleOpen()
+             }else
+            {
+              setmessage(res.message);
+              token()
+            }
+          }
+          )
+      }else
+      {
+        setmessage("Veuillez remplir tous les champs !")
+      }
+
+  }
 
   return (
     <View>
-        <ScrollView>
-         <SCLAlert
+      <ScrollView>
+        <SCLAlert
           show={show}
           onRequestClose={handleClosenon}
           theme="danger"
-          title="Title kbir"
-          subtitle="Merci de creer un compte d'abord"
-          headerIconComponent={<Ionicons name="ios-thumbs-up" size={32} color="white" />}
-        >
-          <SCLAlertButton theme="info" onPress={handleCloseoui}>Déconnecter</SCLAlertButton>
-          <SCLAlertButton theme="default" onPress={handleClosenon}>rester et Continuer</SCLAlertButton>
+          title="Authentification"
+          subtitle="Merci de choisir"
+          headerIconComponent={<Ionicons name="md-log-in" size={50} color="white" />}
+          >
+          <SCLAlertButton theme="info" onPress={handleCloseoui}>Déconnecté </SCLAlertButton>
+          <SCLAlertButton theme="default" onPress={handleClosenon}>Rester connecté</SCLAlertButton>
         </SCLAlert>
-      <View style={styles.header}></View>
-      <Image style={styles.avatar} source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} />
-      <View style={styles.body}>
-        <View style={styles.bodyContent}>
-          <Text style={styles.info}>Vos infos</Text>
+        <View style={styles.header}></View>
+        <Image style={styles.avatar} source={require("../../image/avatar-profile.png")} />
+        <View style={styles.body}>
+          <View style={styles.bodyContent}>
 
-          <Text>Pseudo</Text>
+            <View style={{ alignSelf: "center" }}>
+              <Text style={styles.label}>Pseudo</Text>
+              <TextInput placeholder="Pseudo"
+                style={styles.textInput}
+                value={username}
+                onChangeText={text => setusername(text)}
+                placeholderTextColor={'#d3d0d2'} />
+            </View>
 
-          <TextInput placeholder="Pseudo"
-            style={styles.textInput}
-            value={username}
-            onChangeText={text => setusername(text)}
-            placeholderTextColor={'#d3d0d2'}/>
+            <View style={{ alignSelf: "center" }}>
+              <Text style={styles.label}>Prénom</Text>
+              <TextInput placeholder="Prénom "
+                style={styles.textInput}
+                value={firstname}
+                onChangeText={text => setfirstname(text)}
+                placeholderTextColor={'#d3d0d2'} />
+            </View>
 
-<Text>Prénom</Text>
+            <View style={{ alignSelf: "center" }}>
+              <Text style={styles.label}>Nom</Text>
+              <TextInput placeholder="Nom"
+                style={styles.textInput}
+                value={lastname}
+                onChangeText={text => setlastname(text)}
+                placeholderTextColor={'#d3d0d2'} />
+            </View>
 
-          <TextInput placeholder="Prénom "
-            style={styles.textInput}
-            value={firstname}
-            onChangeText={text => setfirstname(text)}
-            placeholderTextColor={'#d3d0d2'} />
+            <View style={{ alignSelf: "center" }}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput placeholder="Email"
+                style={styles.textInput}
+                value={email}
+                onChangeText={text => setemail(text)}
+                placeholderTextColor={'#d3d0d2'} />
+            </View>
 
-
-<Text>Nom</Text>
-
-          <TextInput placeholder="Nom"
-            style={styles.textInput}
-            value={lastname}
-            onChangeText={text => setlastname(text)}
-            placeholderTextColor={'#d3d0d2'} />
-
-<Text>Email</Text>
-
-          <TextInput placeholder="Email"
-            style={styles.textInput}
-            value={email}
-            onChangeText={text => setemail(text)}
-            placeholderTextColor={'#d3d0d2'} />
+            <Text>{message}</Text>
+            <Button onPress={() => updateaccount()} style={{ marginTop: 20 }} round size="small" color="#245591">
+              Modifier </Button>
+          </View>
 
 
-          <Text>{message}</Text>
-          <Button onPress={() => alert('under construction')} style={{ marginTop: 20 }} round size="small" color="#245591">
-            Modifier </Button>
+
         </View>
-
-
-
-      </View>
       </ScrollView>
     </View>
 
@@ -194,36 +203,37 @@ const styles = StyleSheet.create({
     backgroundColor: "#245591",
     height: 200,
   },
+  label: {
+    fontWeight: "bold",
+    color: '#245591',
+  },
   textInput: {
-    height: 40,
-    width: '75%',
-    borderBottomColor: '#d3d0d2',
-    borderBottomWidth: 1,
-    marginBottom: 25,
     fontSize: 15,
+    height: 40,
+    width: 250,
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d0d2',
+    marginBottom: 10,
   },
   icons: {
     color: '#d3d0d2',
     marginLeft: 13,
     marginRight: 13,
-
   },
   Title: {
-
     color: "#d3d0d2",
     fontSize: 20,
-
   },
   avatar: {
     width: 130,
     height: 130,
-    borderRadius: 63,
-    borderWidth: 4,
-    borderColor: "white",
-    marginBottom: 10,
+    borderRadius: 65,
+    borderWidth: 3,
+    borderColor: "#ecf0f1",
     alignSelf: 'center',
     position: 'absolute',
-    marginTop: 130
+    marginTop: 130,
+    marginBottom: 10,
   },
   body: {
     marginTop: 40,

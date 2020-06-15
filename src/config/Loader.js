@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   skype: {
-    marginTop: 370,
+    marginTop: 490,
   }
 });
 

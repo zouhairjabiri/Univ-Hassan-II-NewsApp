@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage } from 'react-native';
-import { FontAwesome, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome, AntDesign , MaterialCommunityIcons} from '@expo/vector-icons';
 
+import {  } from '@expo/vector-icons'; 
 export function profile(props) {
-
   const [username, setusername] = useState('');
   const [firstname, setfirstname] = useState('');
   const [lastname, setlastname] = useState('');
   const [email, setemail] = useState('');
- 
+  const [isloading, setisloading] = useState(true);
+
+  
+  props.navigation.setOptions({
+    headerTitle: () => <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <Text style={styles.Title}>votre profil</Text>
+      <MaterialCommunityIcons name="account-box" style={{ marginLeft: 5 }} size={30} color="#d3d0d2" />
+    </View>,
+    headerStyle: {
+      backgroundColor: '#245591',
+    },
+  })
+
+
   token = async () => {
     try {
       const getusername = await AsyncStorage.getItem('@username');
@@ -19,25 +32,28 @@ export function profile(props) {
       setfirstname(getfirstname)
       setlastname(getlastname)
       setemail(getemail)
+      setisloading(false)
     }
     catch (error) { console.error(error) }
   };
 
+
   useEffect(() => {
-    token()
-  }, [])
+    token()    
+  },[props.route,props,props.route.parmas])
 
   const logout = () => {
     AsyncStorage.clear();
     props.navigation.navigate('Home')
   }
+
   return (
-
-
     <View>
       <View style={styles.header}></View>
-      {username === null ?
-
+      {isloading ? (
+              <></>
+        ) : username == null ? (
+       <>
         <View style={styles.anonyme}>
           <Text style={styles.anonymetext}>Vous êtes en mode anonyme</Text>
           <AntDesign name="deleteuser" size={80} color="black" />
@@ -46,39 +62,40 @@ export function profile(props) {
             <Text style={styles.but}>   Merci de s'authentifier</Text>
           </TouchableOpacity>
         </View>
-        :
-        <>
-          <Image style={styles.avatar} source={require("../../image/avatar-profile.png")} />
-          <View style={styles.body}>
-            <View style={styles.bodyContent}>
-              <Text style={styles.name}>{username}</Text>
-              <View style={{alignSelf: "center"}}>
-              <View style={{ alignSelf: "flex-start", marginTop: 5 }}>
-                <Text style={styles.label}>Prénom</Text>
-                <Text style={styles.info}>{firstname}</Text>
-              </View>
-              <View style={{ alignSelf: "flex-start", marginTop: 5 }}>
-                <Text style={styles.label}>Nom</Text>
-                <Text style={styles.info}>{lastname}</Text>
-              </View>
-              <View style={{ alignSelf: "flex-start", marginTop: 5 }}>
-                <Text style={styles.label}>Email</Text>
-                <Text style={styles.info}>{email}</Text>
-              </View>
-              </View>
-              <View style={{ marginTop: 50 }} />
-              <TouchableOpacity style={styles.buttonContainer1} onPress={() => props.navigation.navigate('editprofile')}>
-                <FontAwesome size={20} name='edit' color='#ffffff' />
-                <Text style={styles.but}>         Edit Info</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => logout()} style={styles.buttonContainer1}>
-                <FontAwesome size={20} name='sign-out' color='#ffffff' />
-                <Text style={styles.but}>         Logout</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </>
-      }
+    </>
+  ) : (
+    <>
+    <Image style={styles.avatar} source={require("../../image/avatar-profile.png")} />
+    <View style={styles.body}>
+      <View style={styles.bodyContent}>
+        <Text style={styles.name}>{username}</Text>
+        <View style={{alignSelf: "center"}}>
+        <View style={{ alignSelf: "flex-start", marginTop: 5 }}>
+          <Text style={styles.label}>Prénom</Text>
+          <Text style={styles.info}>{firstname}</Text>
+        </View>
+        <View style={{ alignSelf: "flex-start", marginTop: 5 }}>
+          <Text style={styles.label}>Nom</Text>
+          <Text style={styles.info}>{lastname}</Text>
+        </View>
+        <View style={{ alignSelf: "flex-start", marginTop: 5 }}>
+          <Text style={styles.label}>Email</Text>
+          <Text style={styles.info}>{email}</Text>
+        </View>
+        </View>
+        <View style={{ marginTop: 50 }} />
+        <TouchableOpacity style={styles.buttonContainer1} onPress={() => props.navigation.navigate('editprofile')}>
+          <FontAwesome size={20} name='edit' color='#ffffff' />
+          <Text style={styles.but}>         Edit Info</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => logout()} style={styles.buttonContainer1}>
+          <FontAwesome size={20} name='sign-out' color='#ffffff' />
+          <Text style={styles.but}>         Logout</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </>
+    )} 
     </View>
   );
 }
@@ -87,12 +104,16 @@ export function profile(props) {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#245591",
-    height: 200,
+    height: 100,
   },
   anonyme: {
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center"
+  },
+  Title: {
+    color: "#d3d0d2",
+    fontSize: 20,
   },
   anonymetext: {
     fontSize: 20,
@@ -129,7 +150,8 @@ const styles = StyleSheet.create({
     borderColor: "#ecf0f1",
     alignSelf: 'center',
     position: 'absolute',
-    marginTop: 130,
+    marginTop: 50,
+    marginBottom:20
   },
   body: {
     marginTop: 40,

@@ -1,11 +1,11 @@
-import React from 'react'
+import {useEffect,useState} from 'react'
+import * as React  from 'react'
 
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-
 
 import Login from './screen/home/Login';
 import signup from './screen/home/signup';
@@ -66,18 +66,38 @@ function Stackscreen({ navigation, route, props }) {
       <Stack.Screen name="filterbynumberrate" component={filterbynumberrate}/>
       <Stack.Screen name="filterbyratenumber" component={filterbyratenumber}/>
       <Stack.Screen name="filterbycomments" component={filterbycomments}/>
-
       <Stack.Screen name="filterday" component={filterday}/>
       <Stack.Screen name="filtersemaine" component={filtersemaine}/>
       <Stack.Screen name="filtermonth" component={filtermonth}/>
-      <Stack.Screen name="editprofile" component={editprofile}/>
     </Stack.Navigator>
   );
 }
 
+
+function profilescreens({ navigation, route, props }) {
+  return (
+    <Stack.Navigator>
+ 
+ <Stack.Screen
+        name="profile" component={profile}
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account-box" color={'#d3d0d2'} size={size} />
+          ),
+        }} />
+        
+              <Stack.Screen name="editprofile" component={editprofile}/>
+ 
+    </Stack.Navigator>
+  );
+}
+
+
+
 function Tabscreen({ navigation }) {
   return (
-    <Tab.Navigator initialRouteName="feed_home"
+    <Tab.Navigator initialRouteName="Stackscreen"
       tabBarOptions={{
         activeTintColor: '#ffffff',
         inactiveTintColor: '#d3d0d2',
@@ -96,7 +116,7 @@ function Tabscreen({ navigation }) {
           ),
         }} />
       <Tab.Screen
-        name="profile" component={profile}
+        name="profilescreens" component={profilescreens}
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => (
@@ -107,16 +127,50 @@ function Tabscreen({ navigation }) {
   );
 }
 
+function SplashScreen() {
+  return (
+    <>
+    </>
+  );
+}
 
 function Navigator({ navigation }) {
+  const [isloading, setisloading] = useState(true);
+  const [username, setusername] = useState('');
 
+  const AuthContext = React.createContext();
+
+  token = async () => {
+    try {
+      const getusername = await AsyncStorage.getItem('@username');
+      setusername(getusername)
+      setisloading(false)
+    }
+    catch (error) { console.error(error) }
+  };
+  useEffect(() => {
+    token()
+  })
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="signup" component={signup} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen options={{headerShown: false}} name="Tabscreen" component={Tabscreen} />
+      {isloading ? (
+            <Stack.Screen name="Splash" component={SplashScreen} />
+          ) : username == null ? (
+            <>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="signup" component={signup} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen options={{headerShown: false}} name="Tabscreen" component={Tabscreen} />
+            </>
+          ) : (
+            <>
+            <Stack.Screen options={{headerShown: false}} name="Tabscreen" component={Tabscreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="signup" component={signup} />
+            <Stack.Screen name="Login" component={Login} />
+             </>
+            )} 
       </Stack.Navigator>
     </NavigationContainer>
   );

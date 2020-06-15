@@ -4,7 +4,8 @@ import moment from "moment";
 import { MaterialCommunityIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
-
+import APIURL from '../../config/api';
+import TOKEN from '../../config/token'
 
 import {
   Placeholder,
@@ -58,7 +59,7 @@ export function feed_home(props) {
       )
     } else {
       return (
-        <TouchableOpacity onPress={() => { setisissearching(!issearching)}}>
+        <TouchableOpacity onPress={() => { props.navigation.dispatch(DrawerActions.closeDrawer()) ,setisissearching(!issearching)}}>
           <View >
             <Ionicons name="ios-search" size={30} style={styles.icons} />
           </View>
@@ -96,7 +97,6 @@ export function feed_home(props) {
     },
   })
 
-
   useEffect(() => {
     const newData = databackup.filter(item => {
       const itemData = `${item.Description.toUpperCase()} ${item.Titre.toUpperCase()}`;
@@ -112,15 +112,14 @@ export function feed_home(props) {
 
 
   useEffect(() => {
-    token()    
-
-    fetch('https://herokuuniv.herokuapp.com/api/Actualite/', {
-      method: 'GET',
+    token();
+    fetch(`${APIURL}api/Actualite/`, { 
+    method: 'GET',
       headers: {
         Accept:
           'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Token 6819607706a0d0c9702f16fb77750667e8ab684a`
+        'Authorization': `Token ${TOKEN}`  
       }
     }).then(res => res.json())
       .then(res => {
@@ -130,7 +129,7 @@ export function feed_home(props) {
         setisFetching(false)
       })
       .catch(error => console.log(error))
-      
+
   }, [isFetching]);
 
   const onRefresh = () => {
@@ -138,11 +137,12 @@ export function feed_home(props) {
   }
 
   token = async () => {
-    try {
+        try {
       const getid = await AsyncStorage.getItem('@id');
       setid(getid)
     } 
     catch (error) {console.error(error)}
+
   };
 
   return (
@@ -176,13 +176,14 @@ export function feed_home(props) {
             const item = post.item;
             const _actualiteclicked = (actualite) => {
               setquery('')
-              fetch(`https://herokuuniv.herokuapp.com/api/Rating/${actualite.id}/getuserrating/`, {
-                method: 'POST',
+                fetch(`${APIURL}api/Rating/${actualite.id}/getuserrating/`, {
+ 
+              method: 'POST',
                 headers: {
                   Accept:
                     'application/json',
                   'Content-Type': 'application/json',
-                  'Authorization': `Token 6819607706a0d0c9702f16fb77750667e8ab684a`
+                  'Authorization': `Token ${TOKEN}`  
                 },
                 body: JSON.stringify({
                   id: id,

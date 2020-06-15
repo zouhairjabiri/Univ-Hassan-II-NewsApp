@@ -4,7 +4,8 @@ import moment from "moment";
 import { MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-
+import APIURL from '../../../config/api';
+import TOKEN from '../../../config/token'
 
 import {
   Placeholder,
@@ -35,13 +36,13 @@ export function filterday(props) {
   })
 
   useEffect(() => {
-    fetch('https://herokuuniv.herokuapp.com/api/Actualite/getactualitesby24hours/', {
-      method: 'GET',
+    fetch(`${APIURL}api/Actualite/getactualitesby24hours/`, {  
+    method: 'GET',
       headers: {
         Accept:
           'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Token 6819607706a0d0c9702f16fb77750667e8ab684a`
+        'Authorization': `Token ${TOKEN}`  
       }
     }).then(res => res.json())
       .then(res => {

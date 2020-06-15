@@ -2,55 +2,29 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native'
 import moment from "moment";
 
+import APIURL from '../config/api'
 
 export function fetchcomments(id, props) {
   const [data, setdata] = useState([]);
-  const [begin, setbegin] = useState(true);
   const [isFetching, setisFetching] = useState(false);
+  const [isloading, setisloading] = useState(true);
 
 
   useEffect(() => {
-    const url = `https://herokuuniv.herokuapp.com/api/Comment/${id}/getComments/`;
-    fetch(url, {
+    fetch(`${APIURL}api/Comment/${id}/getComments/`, {
       method: 'GET',
       headers: {
         Accept:
           'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
+        'Authorization': `Token ${TOKEN}`  
       }
     }).then(res => res.json())
       .then(res => {
         setdata(res)
-        setisFetching(false)
-
-      })
-
-    setbegin(false)
-
-  }, [id, isFetching])
-
-
-
-  useEffect(() => {
-    const url = `https://herokuuniv.herokuapp.com/api/Comment/${id}/getComments/`;
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        Accept:
-          'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
-      }
-    }).then(res => res.json())
-      .then(res => {
-        setdata(res)
-        setisFetching(false)
-
-      })
-
-    setbegin(false)
-
+         setisFetching(false)
+         setisloading(false)
+      }).catch(error => console.log(error))
   }, [id, isFetching])
 
   const onRefresh = () => {
@@ -59,38 +33,42 @@ export function fetchcomments(id, props) {
 
   return (
     <View style={styles.container}>
-      {begin ? <ActivityIndicator animating size="large" /> : null}
-      {data.length < 1 ?
-        <>
-          <View style={styles.nocom}>
-            <Image
-              style={styles.emptylogo}
-              source={require('../image/no-data-found2.png')}
-            />
-            <Text style={styles.nocomments}>Soyez le premier à commenter !!</Text>
-            <Text style={styles.nocomments}>Cliquez sur le bouton "+"</Text>
-          </View>
-        </>
-        : null
-      }
-      <FlatList
-        data={data}
-        onRefresh={() => onRefresh()}
-        refreshing={isFetching}
-        ItemSeparatorComponent={() => {
-          return (
-            <View style={styles.separator} />
-          )
-        }}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) =>
-          <View style={styles.textContainer}>
-            <Text style={styles.user}>{item.User.username}</Text>
-            <Text style={styles.comment}>{item.Commentaire}</Text>
-            <Text style={styles.dateCreated}>{moment(item.Date, "YYYY-MM-DD[escaped]hh-mm-ss").fromNow()}</Text>
-          </View>
-        }
+      {isloading ? (
+    <ActivityIndicator animating size="large" /> 
+) : data.length < 1 ? (
+    <>
+    <View style={styles.nocom}>
+      <Image
+        style={styles.emptylogo}
+        source={require('../image/no-data-found2.png')}
       />
+      <Text style={styles.nocomments}>Soyez le premier à commenter !!</Text>
+      <Text style={styles.nocomments}>Cliquez sur le bouton "+"</Text>
+    </View>
+  </>
+) : 
+(
+<> 
+<FlatList
+    data={data}
+    onRefresh={() => onRefresh()}
+    refreshing={isFetching}
+    ItemSeparatorComponent={() => {
+      return (
+        <View style={styles.separator} />
+      )
+    }}
+    keyExtractor={item => item.id.toString()}
+    renderItem={({ item }) =>
+      <View style={styles.textContainer}>
+        <Text style={styles.user}>{item.User.username}</Text>
+        <Text style={styles.comment}>{item.Commentaire}</Text>
+        <Text style={styles.dateCreated}>{moment(item.Date, "YYYY-MM-DD[escaped]hh-mm-ss").fromNow()}</Text>
+      </View>
+    }
+  />
+</>
+)} 
     </View>
   )
 }

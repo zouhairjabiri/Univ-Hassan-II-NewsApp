@@ -4,6 +4,7 @@ import { Text, Button } from 'galio-framework';
 import Loader from '../../config/Loader'
 import { Item, Input } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
+import APIURL from '../../config/api'
 
 
 const signup = ({ navigation }) => {
@@ -34,7 +35,7 @@ const signup = ({ navigation }) => {
       lastname.value.length > 0) {
       <ActivityIndicator size="large" color="#0000ff" />
       setloadingstate(true)
-      fetch('https://herokuuniv.herokuapp.com/api/User/create_account/', {
+      fetch(`${APIURL}api/User/create_account/`, {
         method: 'POST',
         headers: {
           Accept:
@@ -59,10 +60,13 @@ const signup = ({ navigation }) => {
             token('@lastname', res.Last_name)
             token('@username', res.username)
             token('@email', res.email)
-            navigation.navigate('Tabscreen', {
-              screen: 'Drawerscreen',
-            }
-            )
+            navigation.replace(
+              'Tabscreen', {
+              screen: 'Stackscreen',
+              params: {
+                screen : 'Drawerscreen',
+              }
+            })
           }
           else {
             setfirstname({ value: '' })

@@ -11,6 +11,8 @@ import {
   Fade
 } from "rn-placeholder";
 
+import APIURL from '../../../config/api';
+import TOKEN from '../../../config/token'
 
 export function filtersemaine(props) {
 
@@ -33,13 +35,13 @@ export function filtersemaine(props) {
       </TouchableOpacity>,
   })
   useEffect(() => {
-    fetch('https://herokuuniv.herokuapp.com/api/Actualite/getactualitesbySemaine/', {
-      method: 'GET',
+          fetch(`${APIURL}api/Actualite/getactualitesbySemaine/`, {
+    method: 'GET',
       headers: {
         Accept:
           'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Token 6819607706a0d0c9702f16fb77750667e8ab684a`
+        'Authorization': `Token ${TOKEN}`  
       }
     }).then(res => res.json())
       .then(res => {

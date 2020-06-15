@@ -4,11 +4,11 @@ import { Text, Button } from 'galio-framework'
 import Loader from '../../config/Loader'
 import { Item, Input } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
-
+import APIURL from '../../config/api'
 
 const Login = ({ navigation }) => {
-  const [username, setusername] = useState({ value: '', error: '' });
-  const [password, setPassword] = useState({ value: '', error: '' });
+  const [username, setusername] = useState({ value: 'test99', error: '' });
+  const [password, setPassword] = useState({ value: 'test', error: '' });
   const [error, seterror] = useState('');
   const [loadingstate, setloadingstate] = useState(false);
   const [icon, seticon] = useState("eye");
@@ -29,7 +29,7 @@ const Login = ({ navigation }) => {
     if (username.value.length > 0 && password.value.length > 0) {
       <ActivityIndicator size="large" color="#ffffff" />
       setloadingstate(true)
-      fetch('https://herokuuniv.herokuapp.com/auth/', {
+      fetch(`${APIURL}auth/`, {
         method: 'POST',
         headers: {
           Accept:
@@ -49,14 +49,16 @@ const Login = ({ navigation }) => {
             token('@lastname', res.Last_name)
             token('@username', res.username)
             token('@email', res.email)
-            setloadingstate(false)
-            const myid = res.id
-            navigation.navigate(
-              'Tabscreen', {
-              screen: 'Drawerscreen',
-              params: { myid }
-            })
 
+            setloadingstate(false)
+             
+            navigation.replace(
+              'Tabscreen', {
+              screen: 'Stackscreen',
+              params: {
+                screen : 'Drawerscreen',
+              }
+            })
           } else {
             setusername({ value: '' })
             setPassword({ value: '' })

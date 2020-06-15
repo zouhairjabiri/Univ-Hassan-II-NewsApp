@@ -4,6 +4,8 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AntDesign, MaterialIcons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import APIURL from '../../config/api'
+import TOKEN from '../../config/token'
 
 export function Sidebar(props) {
 
@@ -12,13 +14,14 @@ export function Sidebar(props) {
   const [dropdown1, setdropdown1] = useState(false);
 
   useEffect(() => {
-    fetch('https://herokuuniv.herokuapp.com/api/Categorie/', {
-      method: 'GET',
+    fetch(`${APIURL}api/Categorie/`, {
+ 
+    method: 'GET',
       headers: {
         Accept:
           'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
+        'Authorization': `Token ${TOKEN}`  
       }
     }).then(res => res.json())
       .then(res => {

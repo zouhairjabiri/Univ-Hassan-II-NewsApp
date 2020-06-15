@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage, TextInput, ScrollView } from 'react-native';
 import { Button } from 'galio-framework'
-import { FontAwesome, MaterialIcons, AntDesign, Entypo, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import {
-  SCLAlert,
-  SCLAlertButton
-} from 'react-native-scl-alert'
-
-
+import { FontAwesome,  AntDesign } from '@expo/vector-icons';
+import APIURL from '../../config/api'
+import TOKEN from '../../config/token'
 
 const editprofile = (props) => {
 
@@ -20,7 +16,7 @@ const editprofile = (props) => {
       backgroundColor: '#245591',
     },
     headerLeft: () =>
-      <TouchableOpacity onPress={() => { props.navigation.navigate('profile') }}>
+      <TouchableOpacity onPress={() => { props.navigation.goBack() }}>
         <AntDesign name="back" size={30} style={styles.icons} />
       </TouchableOpacity>,
   })
@@ -33,8 +29,17 @@ const editprofile = (props) => {
   const [password, setpassword] = useState('');
   const [id, setid] = useState('');
   const [message, setmessage] = useState('');
-  const [show, setshow] = useState(false);
 
+  async function settoken(key, value) {
+    try {
+      await AsyncStorage.setItem(key, value.toString());
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+
+    return true;
+  };
 
    
 
@@ -62,33 +67,13 @@ const editprofile = (props) => {
   }, [])
 
 
-  const handleOpen = () => {
-    setshow(true)
-  }
 
-
-
-  const handleCloseoui = () => {
-    AsyncStorage.clear();
-    props.navigation.navigate('Home')
-    setshow(false)
-
-  }
-
-  const handleClosenon = () => {
- 
-    setshow(false)
-    props.navigation.navigate('Tabscreen', {
-      screen: 'profile',
-      params: { user: true },
-    })
-   }
-  const updateaccount = () =>
+  const updateaccountbasic = () =>
   {
-    if (username.length > 0 && firstname.length > 0 && email.length > 0 &&
+    if (firstname.length > 0 && email.length > 0 &&
       lastname.length > 0) {
-        const url = `https://herokuuniv.herokuapp.com/api/User/${id}/update_account/`
-        fetch(url, {
+        fetch(`${APIURL}api/User/${id}/update_account_basic/`, {
+          
           method: 'POST',
           headers: {
             Accept:
@@ -98,8 +83,44 @@ const editprofile = (props) => {
           body: JSON.stringify({
             first_name: firstname,
             last_name: lastname,
-            username: username,
             email: email,
+          }),
+        }).then(res => res.json())
+          .then(res => {   
+            if(res.message === true)
+            {
+              setfirstname(res.First_name)
+              setlastname(res.Last_name)
+              setemail(res.email)
+              AsyncStorage.clear();
+              props.navigation.replace('Home')
+
+            }else
+            {
+              token()
+              setmessage(res.message);
+            }
+          }
+          )
+      }else
+      {
+        setmessage("Veuillez remplir tous les champs !")
+      }
+
+  }
+
+  const updateaccountusername = () =>
+  {
+    if (username.length > 0 ) {
+        fetch(`${APIURL}api/User/${id}/update_account_username/`, {
+          method: 'POST',
+          headers: {
+            Accept:
+            'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
           }),
         }).then(res => res.json())
           .then(res => {   
@@ -108,10 +129,9 @@ const editprofile = (props) => {
             if(res.message === true)
             {
               setusername(res.username)
-              setfirstname(res.First_name)
-              setlastname(res.Last_name)
-              setemail(res.email)
-              handleOpen()
+              AsyncStorage.clear();
+              props.navigation.replace('Home')
+
              }else
             {
               setmessage(res.message);
@@ -126,25 +146,14 @@ const editprofile = (props) => {
 
   }
 
+
   return (
     <View>
       <ScrollView>
-        <SCLAlert
-          show={show}
-          onRequestClose={handleClosenon}
-          theme="danger"
-          title="Authentification"
-          subtitle="Merci de choisir"
-          headerIconComponent={<Ionicons name="md-log-in" size={50} color="white" />}
-          >
-          <SCLAlertButton theme="info" onPress={handleCloseoui}>Déconnecté </SCLAlertButton>
-          <SCLAlertButton theme="default" onPress={handleClosenon}>Rester connecté</SCLAlertButton>
-        </SCLAlert>
         <View style={styles.header}></View>
         <Image style={styles.avatar} source={require("../../image/avatar-profile.png")} />
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-
             <View style={{ alignSelf: "center" }}>
               <Text style={styles.label}>Pseudo</Text>
               <TextInput placeholder="Pseudo"
@@ -153,6 +162,8 @@ const editprofile = (props) => {
                 onChangeText={text => setusername(text)}
                 placeholderTextColor={'#d3d0d2'} />
             </View>
+            <Button onPress={() => updateaccountusername()} style={{ marginTop: 20 }} round size="small" color="#245591">
+              Modifier </Button>
 
             <View style={{ alignSelf: "center" }}>
               <Text style={styles.label}>Prénom</Text>
@@ -182,7 +193,7 @@ const editprofile = (props) => {
             </View>
 
             <Text>{message}</Text>
-            <Button onPress={() => updateaccount()} style={{ marginTop: 20 }} round size="small" color="#245591">
+            <Button onPress={() => updateaccountbasic()} style={{ marginTop: 20 }} round size="small" color="#245591">
               Modifier </Button>
           </View>
 

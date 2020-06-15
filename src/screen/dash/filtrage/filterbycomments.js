@@ -3,7 +3,8 @@ import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity, Ac
 import moment from "moment";
 import { MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-
+import APIURL from '../../../config/api'
+import TOKEN from '../../../config/token'
 
 
 import {
@@ -34,13 +35,13 @@ export function filterbycomments(props) {
   })
 
   useEffect(() => {
-    fetch('https://herokuuniv.herokuapp.com/api/Actualite/getactualitesbycomments/', {
+      fetch(`${APIURL}api/Actualite/getactualitesbycomments/`, {
       method: 'GET',
       headers: {
         Accept:
           'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Token 6819607706a0d0c9702f16fb77750667e8ab684a`
+        'Authorization': `Token ${TOKEN}`  
       }
     }).then(res => res.json())
       .then(res => {

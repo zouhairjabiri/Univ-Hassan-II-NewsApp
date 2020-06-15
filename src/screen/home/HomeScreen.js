@@ -9,14 +9,20 @@ export function HomeScreen(props) {
 
   const Gowithoutlogin = () => {
     AsyncStorage.clear()
-    props.navigation.navigate('Tabscreen', { screen: 'Drawerscreen' })
-  }
+    props.navigation.replace(
+      'Tabscreen', {
+      screen: 'Stackscreen',
+      params: {
+        screen : 'Drawerscreen',
+        params : {'user' : true}
+      }
+    })  }
   return (
 
 
     <View style={styles.container}>
       <View style={styles.skip}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('Tabscreen', { screen: 'Drawerscreen' })}>
+        <TouchableOpacity onPress={() => Gowithoutlogin()}>
           <AntDesign name="close" size={30} color="#fff" />
         </TouchableOpacity>
       </View>

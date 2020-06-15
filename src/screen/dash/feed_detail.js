@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ImageBackground, ScrollView, AsyncStorage, TouchableOpacity } from 'react-native';
 import { AirbnbRating } from 'react-native-elements';
 import { FontAwesome, MaterialIcons, AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
-import {
-  SCLAlert,
-  SCLAlertButton
-} from 'react-native-scl-alert'
 
+
+import APIURL from '../../config/api'
+import TOKEN from '../../config/token'
 import moment from "moment";
 
 export function feed_detail(props) {
@@ -16,6 +15,7 @@ export function feed_detail(props) {
   const [id, setid] = useState('');
   const [message, setmessage] = useState('');
   const [show, setshow] = useState(false);
+  const [isloading, setisloading] = useState(true);
 
   props.navigation.setOptions({
     headerTitle: '',
@@ -59,6 +59,7 @@ export function feed_detail(props) {
 
   useEffect(() => {
     token()
+    setisloading(false)
   }, [props.route.params.myid])
 
   const handleOpen = () => {
@@ -82,14 +83,13 @@ export function feed_detail(props) {
     if (id == null) {
       handleOpen()
     } else {
-      const url = `https://herokuuniv.herokuapp.com/api/Rating/${actualite.id}/rating/`
-      fetch(url, {
+        fetch(`${APIURL}api/Rating/${actualite.id}/rating/`, {
         method: 'POST',
         headers: {
           Accept:
             'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
+          'Authorization': `Token ${TOKEN}`  
         },
         body: JSON.stringify({
           id: id,
@@ -103,7 +103,6 @@ export function feed_detail(props) {
             alert(username + ':  la modification est enregistrer')
           }
         }
-
         )
     }
 
@@ -141,19 +140,24 @@ export function feed_detail(props) {
         <Text style={styles.editeur}>Éditeur : {actualite.auteur.first_name}</Text>
       </View>
 
-      {username === null ? null :
-        <View>
-          <AirbnbRating
-            count={5}
-            reviews={["Nul", "Mauvais", "Pas mal", "Bien", "Excellent"]}
-            defaultRating={5}
-            size={15}
-            onFinishRating={onFinishRating}
-            defaultRating={rateuser === null ? 0 : rateuser}
-          />
-          <Text style={styles.vote}>Total des votes : {actualite.no_of_ratings}</Text>
-        </View>
-      }
+      {isloading ? (
+<></>
+
+)
+: username === null ? null :
+<View>
+  <AirbnbRating
+    count={5}
+    reviews={["Nul", "Mauvais", "Pas mal", "Bien", "Excellent"]}
+    defaultRating={5}
+    size={15}
+    onFinishRating={onFinishRating}
+    defaultRating={rateuser === null ? 0 : rateuser}
+  />
+  <Text style={styles.vote}>Total des votes : {actualite.no_of_ratings}</Text>
+</View>
+
+} 
 
       <Text style={styles.desc}> {actualite.Description} </Text>
     </ScrollView >

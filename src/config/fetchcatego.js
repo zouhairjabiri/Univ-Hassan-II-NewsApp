@@ -2,21 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import moment from "moment";
-
+import APIURL from '../config/api'
+import TOKEN from './token'
 export function fetchcatego(id, props) {
   const [data, setdata] = useState([]);
   const [myid, setmyid] = useState(id);
 
   useEffect(() => {
     setmyid(id)
-    const url = `https://herokuuniv.herokuapp.com/api/Actualite/${id}/getactualites/`;
-    fetch(url, {
+    fetch(`${APIURL}api/Actualite/${id}/getactualites/`, {
       method: 'GET',
       headers: {
         Accept:
           'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
+        'Authorization': `Token ${TOKEN}`  
+      
       }
     }).then(res => res.json())
       .then(res => setdata(res))

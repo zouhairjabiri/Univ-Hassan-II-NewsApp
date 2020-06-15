@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, AsyncStorage } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Button } from 'galio-framework'
+import APIURL from '../../config/api'
+import TOKEN from '../../config/token'
 
 export function feed_addcomments(props) {
     const [comment, setcomment] = useState('')
@@ -31,14 +33,14 @@ export function feed_addcomments(props) {
 
     const addcomment = () => {
         const { actualite_id } = props.route.params
-        const url = `https://herokuuniv.herokuapp.com/api/Comment/`
-        fetch(url, {
+        fetch(`${APIURL}api/Comment/`, {
+
             method: 'POST',
             headers: {
                 Accept:
                     'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Token 6819607706a0d0c9702f16fb77750667e8ab684a'
+                'Authorization': `Token ${TOKEN}`  
             },
             body: JSON.stringify({
                 Commentaire: comment,

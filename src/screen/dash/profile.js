@@ -13,7 +13,7 @@ export function profile(props) {
   
   props.navigation.setOptions({
     headerTitle: () => <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-      <Text style={styles.Title}>votre profil</Text>
+      <Text style={styles.Title}>Profil</Text>
       <MaterialCommunityIcons name="account-box" style={{ marginLeft: 5 }} size={30} color="#d3d0d2" />
     </View>,
     headerStyle: {
@@ -44,7 +44,7 @@ export function profile(props) {
 
   const logout = () => {
     AsyncStorage.clear();
-    props.navigation.navigate('Home')
+    props.navigation.push('Home')
   }
 
   return (

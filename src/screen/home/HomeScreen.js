@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, StyleSheet, Image, AsyncStorage } from 'react-native'
+import React,{useEffect} from 'react'
+import { View, StyleSheet, Image, AsyncStorage , BackHandler,Alert} from 'react-native'
 
 import { Text, Button } from 'galio-framework';
 
@@ -17,6 +17,35 @@ export function HomeScreen(props) {
         params : {'user' : true}
       }
     })  }
+
+    useEffect(() => {
+      const backAction = () => {
+  
+  if(props.navigation.isFocused())
+  {
+    Alert.alert("Hold on!", "Are you sure you want to go back?", [
+      {
+        text: "Cancel",
+        onPress: () => null,
+        style: "cancel"
+      },
+      { text: "YES", onPress: () => BackHandler.exitApp() }
+    ]);
+  }else{
+    props.navigation.goBack()
+  
+  }
+              return true;
+      };
+  
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+  
+      return () => backHandler.remove();
+    }, []);
+  
   return (
 
 

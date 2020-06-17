@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react'
-import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity, AsyncStorage, TextInput } from 'react-native'
+import { View, Text, ImageBackground, StyleSheet, FlatList, TouchableOpacity, AsyncStorage, TextInput ,BackHandler,Alert} from 'react-native'
 import moment from "moment";
 import { MaterialCommunityIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
@@ -144,6 +144,39 @@ export function feed_home(props) {
     catch (error) {console.error(error)}
 
   };
+
+
+  useEffect(() => {
+    const backAction = () => {
+
+if(props.navigation.isFocused())
+{
+  Alert.alert("Hold on!", "Are you sure you want to go back?", [
+    {
+      text: "Cancel",
+      onPress: () => null,
+      style: "cancel"
+    },
+    { text: "YES", onPress: () => BackHandler.exitApp() }
+  ]);
+}else{
+  props.navigation.goBack()
+
+}
+            return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+
+
+ 
 
   return (
     <View>

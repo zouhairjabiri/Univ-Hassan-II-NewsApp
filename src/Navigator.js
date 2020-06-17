@@ -118,7 +118,7 @@ function Tabscreen({ navigation }) {
       <Tab.Screen
         name="profilescreens" component={profilescreens}
         options={{
-          title: 'Profile',
+          title: 'Profil',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account-box" color={'#d3d0d2'} size={size} />
           ),

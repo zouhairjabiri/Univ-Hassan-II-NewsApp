@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import APIURL from '../../config/api'
 
 const Login = ({ navigation }) => {
-  const [username, setusername] = useState({ value: 'test99', error: '' });
+  const [username, setusername] = useState({ value: 'test97', error: '' });
   const [password, setPassword] = useState({ value: 'test', error: '' });
   const [error, seterror] = useState('');
   const [loadingstate, setloadingstate] = useState(false);
@@ -52,7 +52,7 @@ const Login = ({ navigation }) => {
 
             setloadingstate(false)
              
-            navigation.replace(
+            navigation.push(
               'Tabscreen', {
               screen: 'Stackscreen',
               params: {

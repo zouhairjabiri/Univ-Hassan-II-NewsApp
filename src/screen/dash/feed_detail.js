@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ImageBackground, ScrollView, AsyncStorage, TouchableOpacity } from 'react-native';
 import { AirbnbRating } from 'react-native-elements';
 import { FontAwesome, MaterialIcons, AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
-
-
 import APIURL from '../../config/api'
 import TOKEN from '../../config/token'
 import moment from "moment";
@@ -66,8 +64,6 @@ export function feed_detail(props) {
     setshow(true)
   }
 
-
-
   const handleCloseoui = () => {
     props.navigation.navigate('Home')
     setshow(false)
@@ -77,7 +73,6 @@ export function feed_detail(props) {
   const handleClosenon = () => {
     setshow(false)
   }
-
 
   const onFinishRating = (number) => {
     if (id == null) {
@@ -98,9 +93,9 @@ export function feed_detail(props) {
       }).then(res => res.json())
         .then(res => {
           if (res.message === 'Succed') {
-            alert(username + ':  Merci pour votre évaluation ')
+            alert(username + ' : Votre note est enregistrée !')
           } else {
-            alert(username + ':  la modification est enregistrer')
+            alert(username + ' : Votre note a été modifiée !')
           }
         }
         )

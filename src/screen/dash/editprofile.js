@@ -146,7 +146,6 @@ const editprofile = (props) => {
 
   }
 
-
   return (
     <View>
       <ScrollView>
@@ -163,8 +162,9 @@ const editprofile = (props) => {
                 placeholderTextColor={'#d3d0d2'} />
             </View>
             <Button onPress={() => updateaccountusername()} style={{ marginTop: 20 }} round size="small" color="#245591">
-              Modifier </Button>
+              Changer Pseudo </Button>
 
+            <View style={{marginTop: 25}} />
             <View style={{ alignSelf: "center" }}>
               <Text style={styles.label}>Prénom</Text>
               <TextInput placeholder="Prénom "
@@ -193,8 +193,8 @@ const editprofile = (props) => {
             </View>
 
             <Text>{message}</Text>
-            <Button onPress={() => updateaccountbasic()} style={{ marginTop: 20 }} round size="small" color="#245591">
-              Modifier </Button>
+            <Button onPress={() => updateaccountbasic()} style={{ marginTop: 10 }} round size="small" color="#245591">
+              Modifier Infos</Button>
           </View>
 
 

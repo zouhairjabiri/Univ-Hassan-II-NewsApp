@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native'
 import moment from "moment";
-
 import APIURL from '../config/api'
+import TOKEN from '../config/token'
 
 export function fetchcomments(id, props) {
   const [data, setdata] = useState([]);

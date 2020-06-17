@@ -7,8 +7,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import APIURL from '../../config/api'
 
 const Login = ({ navigation }) => {
-  const [username, setusername] = useState({ value: 'test97', error: '' });
-  const [password, setPassword] = useState({ value: 'test', error: '' });
+  const [username, setusername] = useState({ value: '', error: '' });
+  const [password, setPassword] = useState({ value: '', error: '' });
   const [error, seterror] = useState('');
   const [loadingstate, setloadingstate] = useState(false);
   const [icon, seticon] = useState("eye");
